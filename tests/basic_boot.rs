@@ -1,4 +1,4 @@
-// src/main.rs
+// tests/basic_boot.rs
 
 #![no_std]
 #![no_main]
@@ -10,24 +10,18 @@ use core::panic::PanicInfo;
 use rusty_os::println;
 
 #[no_mangle]
-pub extern "C" fn _start() -> ! {    
-    println!("Hello!");
-    
-    #[cfg(test)]
+pub extern "C" fn _start() -> ! {
     test_main();
     
     loop {}
 }
 
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    println!("{}", info);
-    loop {}
-}
-
-#[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     rusty_os::test_panic_handler(info)
+}
+
+#[test_case]
+fn test_println() {
+    println!("output.");
 }
